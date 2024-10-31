@@ -25,4 +25,6 @@ public class OperacionCuenta {
 
     @ManyToOne
     private CuentaBancaria cuentaBancaria;
+
+    private String descripcion;
 }

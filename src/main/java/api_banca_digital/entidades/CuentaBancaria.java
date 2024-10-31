@@ -18,7 +18,7 @@ import java.util.List;
 public class CuentaBancaria {
 
     @Id
-    private Long id;
+    private String id;
     private double balance;
     private Date fechaCreacion;
 
