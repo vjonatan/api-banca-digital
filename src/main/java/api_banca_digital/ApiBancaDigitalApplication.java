@@ -1,21 +1,21 @@
 package api_banca_digital;
 
-import api_banca_digital.entidades.Cliente;
-import api_banca_digital.entidades.CuentaActual;
-import api_banca_digital.entidades.CuentaAhorro;
-import api_banca_digital.entidades.OperacionCuenta;
+import api_banca_digital.entidades.*;
 import api_banca_digital.enums.EstadoCuenta;
 import api_banca_digital.enums.TipoOperacion;
+import api_banca_digital.excepciones.ClienteNotFoundException;
 import api_banca_digital.repositorios.ClienteRepository;
 import api_banca_digital.repositorios.CuentaBancariaRepository;
 import api_banca_digital.repositorios.OperacionCuentaRepository;
 import api_banca_digital.servicios.BancoService;
+import api_banca_digital.servicios.CuentaBancariaService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -26,14 +26,46 @@ public class ApiBancaDigitalApplication {
 		SpringApplication.run(ApiBancaDigitalApplication.class, args);
 	}
 
-	@Bean
+	//@Bean
 	CommandLineRunner consulta(BancoService bancoService){
 		return args -> {
 			bancoService.consultar();
 		};
 	}
 
-	//@Bean
+	@Bean
+	CommandLineRunner start (CuentaBancariaService cuentaBancariaService){
+		return args -> {
+
+			Stream.of("Jonatan", "Alejandra", "Francisco", "Agustin").forEach(nombre -> {
+				Cliente cliente = new Cliente();
+				cliente.setNombre(nombre);
+				cliente.setEmail(nombre + "@gmail.com");
+				cuentaBancariaService.saveCliente(cliente);
+			});
+
+			cuentaBancariaService.listClientes().forEach(cliente -> {
+                try {
+                    cuentaBancariaService.saveCuentaBancariaActual(Math.random() * 9000, 9000, cliente.getId());
+					cuentaBancariaService.saveCuentaBancariaAhorro(500000, 5.5, cliente.getId());
+
+					List<CuentaBancaria> cuentaBancariaList = cuentaBancariaService.listCuentasBancarias();
+
+					for (CuentaBancaria cuentaBancaria : cuentaBancariaList){
+						for (int i = 0; i < 10; i ++){
+							cuentaBancariaService.credit(cuentaBancaria.getId(), 15000, "Credito");
+							cuentaBancariaService.debit(cuentaBancaria.getId(), 12000, "Debito");
+						}
+					}
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+		};
+	}
+
+	/*@Bean
 	CommandLineRunner start (ClienteRepository clienteRepository, CuentaBancariaRepository cuentaBancariaRepository, OperacionCuentaRepository operacionCuentaRepository){
 		return args -> {
 
@@ -80,6 +112,6 @@ public class ApiBancaDigitalApplication {
 			});
 
 		};
-	}
+	}*/
 
 }

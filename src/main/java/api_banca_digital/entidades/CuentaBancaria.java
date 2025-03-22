@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "TIPO", length = 4)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) //Herencia - SINGLE_TABLE
+@DiscriminatorColumn(name = "TIPO", length = 4) //TIPO - es una columna que indica el tipo de cta
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -28,6 +28,6 @@ public class CuentaBancaria {
     @ManyToOne
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "cuentaBancaria")
+    @OneToMany(mappedBy = "cuentaBancaria", fetch = FetchType.LAZY)
     private List<OperacionCuenta> operacionesCuenta;
 }

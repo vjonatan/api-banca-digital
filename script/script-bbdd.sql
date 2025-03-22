@@ -1,0 +1,2 @@
+DROP DATABASE bbdd_spring_boot_rest_proyecto04;
+CREATE DATABASE bbdd_spring_boot_rest_proyecto04;
