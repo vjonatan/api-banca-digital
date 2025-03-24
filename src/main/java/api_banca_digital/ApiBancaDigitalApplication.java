@@ -33,7 +33,7 @@ public class ApiBancaDigitalApplication {
 		};
 	}
 
-	@Bean
+	//@Bean
 	CommandLineRunner start (CuentaBancariaService cuentaBancariaService){
 		return args -> {
 

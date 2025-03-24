@@ -1,10 +1,12 @@
 package api_banca_digital.servicios.impl;
 
+import api_banca_digital.dto.ClienteDTO;
 import api_banca_digital.entidades.*;
 import api_banca_digital.enums.TipoOperacion;
 import api_banca_digital.excepciones.BalanceInsuficienteException;
 import api_banca_digital.excepciones.ClienteNotFoundException;
 import api_banca_digital.excepciones.CuentaBancariaNotFoundException;
+import api_banca_digital.mapper.CuentaBancariaMapperImpl;
 import api_banca_digital.repositorios.ClienteRepository;
 import api_banca_digital.repositorios.CuentaBancariaRepository;
 import api_banca_digital.repositorios.OperacionCuentaRepository;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -31,6 +34,9 @@ public class CuentaBancariaServiceImpl implements CuentaBancariaService {
 
     @Autowired
     private OperacionCuentaRepository operacionCuentaRepository;
+
+    @Autowired
+    private CuentaBancariaMapperImpl cuentaBancariaMapper;
 
     @Override
     public Cliente saveCliente(Cliente cliente) {
@@ -79,8 +85,13 @@ public class CuentaBancariaServiceImpl implements CuentaBancariaService {
     }
 
     @Override
-    public List<Cliente> listClientes() {
-        return clienteRepository.findAll();
+    public List<ClienteDTO> listClientes() {
+        List<Cliente> clientes = clienteRepository.findAll();
+        List<ClienteDTO> clienteDTOS = clientes.stream()
+                .map(cliente -> cuentaBancariaMapper.mapearDeCliente(cliente))
+                .collect(Collectors.toList());
+
+        return clienteDTOS;
     }
 
     @Override

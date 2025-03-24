@@ -1,5 +1,6 @@
 package api_banca_digital.servicios;
 
+import api_banca_digital.dto.ClienteDTO;
 import api_banca_digital.entidades.Cliente;
 import api_banca_digital.entidades.CuentaActual;
 import api_banca_digital.entidades.CuentaAhorro;
@@ -18,7 +19,7 @@ public interface CuentaBancariaService {
 
     CuentaAhorro saveCuentaBancariaAhorro(double balanceInicial, double tasaInteres, Long clienteId) throws ClienteNotFoundException;
 
-    List<Cliente> listClientes();
+    List<ClienteDTO> listClientes();
 
     CuentaBancaria getCuentaBancaria(String cuentaId) throws CuentaBancariaNotFoundException;
 
